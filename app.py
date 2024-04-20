@@ -11,8 +11,8 @@ df = conn.read(
 # Add currency sign to 'Debit' column
 
 # Group by 'Account' using Pandas.
-grouped_df = df.groupby('Account')['Debit'].sum().reset_index()
+grouped_df = df.groupby('Account')['Amount'].sum().reset_index()
 
-grouped_df.style.format({'Debit': lambda val: f'${val:,.2f}'})
+grouped_df.style.format({'Amount': lambda val: f'${val:,.2f}'})
 # Display bar chart
 st.bar_chart(grouped_df.set_index('Account'), )
