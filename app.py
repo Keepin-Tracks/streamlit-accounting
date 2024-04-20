@@ -7,10 +7,12 @@ df = conn.read(
     worksheet="Transactions",
     ttl="10m",
 )
-df['Debit'] = df['Debit'].map(lambda x: f"${x:.00f}")
+
+# Add currency sign to 'Debit' column
 
 # Group by 'Account' using Pandas.
 grouped_df = df.groupby('Account')['Debit'].sum().reset_index()
 
+grouped_df.style.format({'Debit': lambda val: f'${val:,.2f}'})
 # Display bar chart
-st.bar_chart(grouped_df.set_index('Account'))
+st.bar_chart(grouped_df.set_index('Account'), )
