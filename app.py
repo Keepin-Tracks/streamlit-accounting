@@ -13,6 +13,7 @@ df = conn.read(
 # Group by 'Account' using Pandas.
 grouped_df = df.groupby('Account')['Amount'].sum().reset_index()
 
-grouped_df.style.format({'Amount': lambda val: f'${val:,.2f}'})
+grouped_df['Amount'] = grouped_df['Amount'].apply(lambda x: "${:.2f}".format(x))
+
 # Display bar chart
 st.bar_chart(grouped_df.set_index('Account'), )

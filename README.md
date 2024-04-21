@@ -7,7 +7,8 @@ A data visualization application built on top of a Google Sheets where data has 
 ## For developpers
 
 1. Set up your environment: Follow [Streamlit Documentation](https://docs.streamlit.io/get-started/installation/command-line)
-2. Run the app
+2. Copy the content of the app secrets from streamlit into ./.streamlit/secrets.toml
+3. Run the app
 ```bash
 streamlit run app.py
 ```
