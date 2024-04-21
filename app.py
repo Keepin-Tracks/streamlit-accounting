@@ -6,17 +6,50 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 
 df = conn.read(
     worksheet="Transactions",
-    ttl="10m",
+    ttl="10m", # Time before refetching data
 )
 df.dropna(inplace=True)
 
+@st.cache_data(ttl=3600)
+def get_categories():
+    df = conn.read(
+        worksheet="Categories",
+        ttl="10m",
+    )
+    df.dropna(inplace=True)
+    return df
+
+@st.cache_data(ttl=3600)
+def get_subGroups():
+    df = conn.read(
+        worksheet="SubGroups",
+        ttl="10m",
+    )
+    df.dropna(inplace=True)
+    return df
+
+@st.cache_data(ttl=3600)
+def get_accounts():
+    df = conn.read(
+        worksheet="Accounts",
+        ttl="10m",
+    )
+    df.dropna(inplace=True)
+    return df
+
+df_categories = get_categories()
+df_subGroups = get_subGroups()
+df_accounts = get_accounts()
+
 df['all'] = 'all'
 
+# df.join(df_categories)
+df = df.join(df_accounts.set_index('Account'), on='Account')
 df['Abs_Amount'] = df['Amount'].abs()
 
 
 fig = px.treemap(df,
-                 path=['all', 'Account', 'Date'],
+                 path=['all','SubGroup', 'Account', 'Date'],
                  values='Abs_Amount',
                  color='Amount',
                  color_continuous_scale='RdBu',
